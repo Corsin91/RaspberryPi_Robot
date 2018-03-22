@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 from l293d import L293D
 from ultrasonic import US
- 
+import getch 
  
 class Robot():
 	def __init__(self, motor_left_pin1=23, motor_left_pin2=24, motor_right_pin1=17, motor_right_pin2=27, line_follow_pin_left=19, line_follow_pin_right=6,
@@ -101,3 +101,50 @@ class Robot():
 				print(dists[maxIndex], self.motor.DIST_PER_SEC)
 				self.motor.stop()
 				return	
+
+	def Control(self, controller):
+		dist_per_keypress=10.0
+		while True:
+			pressedKey=controller() #getch.getch()
+			print(pressedKey)
+			if pressedKey == 'FORWARD':
+				self.motor.forward()
+				time.sleep(dist_per_keypress / self.motor.DIST_PER_SEC)
+				self.motor.stop()
+			elif pressedKey == 'RIGHT':
+				self.motor.forwardRight()
+				time.sleep(self.motor.SEC_PER_TURN / 360.0 *90.0)
+				self.motor.stop()
+			elif pressedKey == 'LEFT':
+				self.motor.forwardLeft()
+				time.sleep(self.motor.SEC_PER_TURN / 360.0 *90)
+				self.motor.stop()
+			elif pressedKey == 'BACKWARD':
+				self.motor.backward()
+				time.sleep(dist_per_keypress /self.motor.DIST_PER_SEC)
+				self.motor.stop()
+			elif pressedKey == 'STOP':
+				self.motor.stop()
+
+	def Controlling(self, pressedKey):
+		dist_per_keypress=10.0
+		if pressedKey == 'FORWARD':
+                	self.motor.forward()
+                        time.sleep(dist_per_keypress / self.motor.DIST_PER_SEC)
+                        self.motor.stop()
+                elif pressedKey == 'RIGHT':
+                        self.motor.forwardRight()
+                        time.sleep(self.motor.SEC_PER_TURN / 360.0 *90.0)
+                        self.motor.stop()
+                elif pressedKey == 'LEFT':
+                        self.motor.forwardLeft()
+                        time.sleep(self.motor.SEC_PER_TURN / 360.0 *90)
+                        self.motor.stop()
+                elif pressedKey == 'BACKWARD':
+                        self.motor.backward()
+                        time.sleep(dist_per_keypress /self.motor.DIST_PER_SEC)
+                        self.motor.stop()
+                elif pressedKey == 'STOP':
+                        self.motor.stop()
+              
+	
